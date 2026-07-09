@@ -5,11 +5,13 @@ import joblib
 # 1. Page Configuration & Styling
 st.set_page_config(page_title="HR AI Adoption ROI Predictor", layout="wide")
 
+# Custom Professional Premium CSS
 st.markdown("""
     <style>
-    .main-title { font-size:32px; font-weight:bold; color: #1E3A8A; text-align: center; margin-bottom: 20px; }
-    .section-title { font-size:20px; font-weight:bold; color: #1E3A8A; margin-top: 15px; margin-bottom: 10px; }
-    .output-box { background-color: #F3F4F6; padding: 20px; border-radius: 10px; border-left: 5px solid #1E3A8A; }
+    .main-title { font-size:36px; font-weight:bold; color: #1E3A8A; text-align: center; margin-bottom: 5px; }
+    .sub-title { font-size:16px; text-align: center; color: #555555; margin-bottom: 30px; }
+    .card { background-color: #F8FAFC; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #E2E8F0; }
+    .metric-container { background-color: #FFFFFF; padding: 15px; border-radius: 8px; border-left: 5px solid #1E3A8A; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
     </style>
 """, unsafe_allow_html=True)
 
@@ -30,44 +32,61 @@ except Exception as e:
     st.stop()
 
 # ----------------------------------------------------
-# STEP 2: USER INTERFACE DESIGN
+# STEP 2: USER INTERFACE DESIGN (Premium Multi-Tab)
 # ----------------------------------------------------
-st.markdown("<div class='main-title'>HR AI Adoption ROI & Productivity Predictor</div>", unsafe_allow_html=True)
-st.write("Enter the new employee metrics below to instantly forecast their Productivity Gain and Financial ROI.")
+st.markdown("<div class='main-title'>💼 HR AI Adoption ROI Predictor</div>", unsafe_allow_html=True)
+st.markdown("<div class='sub-title'>Enterprise-grade Workforce Productivity Forecasting & Financial ROI Dashboard</div>", unsafe_allow_html=True)
 
-# Create a layout with two main columns (Left for inputs, Right for outputs)
-col1, col2 = st.columns([2, 1.2])
+# Define Tabs for a clean multi-page flow inside a single app
+tab1, tab2, tab3 = st.tabs(["🧑‍💼 1. Employee Profile", "🤖 2. AI & Analytics Inputs", "🎯 3. Live ROI Dashboard"])
 
-with col1:
-    st.subheader("📊 Employee & AI Work Profile Input")
+with tab1:
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
+    st.subheader("Personal & Professional Demographics")
+    st.write("Fill in the standard HR profile details for the employee below:")
     
-    # Create 3 sub-columns inside the input form for a cleaner look
-    f_col1, f_col2, f_col3 = st.columns(3)
-    
-    with f_col1:
+    col_a, col_b = st.columns(2)
+    with col_a:
         age = st.number_input("Age", min_value=18, max_value=60, value=35)
         department = st.selectbox("Department", ["Sales", "Research & Development", "Human Resources"])
         job_role = st.selectbox("Job Role", ["Sales Executive", "Research Scientist", "Laboratory Technician", "Manufacturing Director", "Healthcare Representative", "Manager", "Sales Representative", "Research Director", "Human Resources"])
         marital_status = st.selectbox("Marital Status", ["Single", "Married", "Divorced"])
         gender = st.selectbox("Gender", ["Male", "Female"])
         
-    with f_col2:
+    with col_b:
         monthly_income = st.number_input("Monthly Income ($)", min_value=1000, max_value=20000, value=6500)
         daily_rate = st.number_input("Daily Rate", min_value=100, max_value=1500, value=800)
         monthly_rate = st.number_input("Monthly Rate", min_value=2000, max_value=30000, value=14000)
         hourly_rate = st.number_input("Hourly Rate", min_value=30, max_value=100, value=70)
         percent_hike = st.number_input("Percent Salary Hike", min_value=11, max_value=25, value=15)
-        overtime = st.selectbox("Overtime", ["No", "Yes"])
+        overtime = st.selectbox("Overtime Working", ["No", "Yes"])
+    st.markdown("</div>", unsafe_allow_html=True)
+    
+    st.info("ℹ️ Next Step: Please click on the '2. AI & Analytics Inputs' tab at the top to configure AI details.")
 
-    with f_col3:
-        ai_usage = st.slider("AI Usage Level (1=Low, 3=High)", 1, 3, 3)
-        uses_ai = st.selectbox("Uses AI Tools", ["Yes", "No"])
-        ai_training = st.selectbox("AI Training Level", ["50+ Hours", "21-50 Hours", "1-20 Hours", "0 Hours"])
-        ai_sentiment = st.selectbox("AI Adoption Sentiment", ["Supportive", "Neutral", "Resistant"])
-        perf_rating = st.slider("Performance Rating", 3, 4, 3)
-        work_life = st.slider("Work Life Balance (1=Bad, 4=Best)", 1, 4, 3)
+with tab2:
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
+    st.subheader("AI Toolkit Configuration & Sentiment")
+    st.write("Specify how the employee interacts with corporate artificial intelligence software:")
+    
+    col_c, col_d = st.columns(2)
+    with col_c:
+        uses_ai = st.selectbox("Currently Uses AI Tools", ["Yes", "No"])
+        ai_usage = st.slider("AI Integration Level (1=Low Integration, 3=High Workflow Dependency)", 1, 3, 3)
+        
+    with col_d:
+        ai_training = st.selectbox("AI Training Received", ["50+ Hours", "21-50 Hours", "1-20 Hours", "0 Hours"])
+        ai_sentiment = st.selectbox("Employee AI Adoption Sentiment", ["Supportive", "Neutral", "Resistant"])
 
-    # Miscellaneous variables mapped directly to avoid single-row dummy variance
+    st.subheader("Performance & Culture Baseline")
+    col_e, col_f = st.columns(2)
+    with col_e:
+        perf_rating = st.slider("Current Performance Rating", 3, 4, 3)
+    with col_f:
+        work_life = st.slider("Work Life Balance Score (1=Poor, 4=Excellent)", 1, 4, 3)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # Miscellaneous structural mappings to prevent encoding variance
     distance = 8 if department == "Research & Development" else 12
     education = 3
     env_sat = 3
@@ -86,17 +105,19 @@ with col1:
     attrition = "No"
     travel = "Travel_Rarely"
 
-with col2:
-    st.subheader("🎯 Live Prediction & ROI")
-    st.write("Click below to calculate real-time insights.")
+with tab3:
+    st.subheader("Execute Predictive Analytics Model")
+    st.write("Click the action button below to pass inputs into the Random Forest Engine and dynamically calculate ROI metrics.")
     
-    if st.button("🚀 Run Working Model", type="primary"):
-        
+    # Large primary functional button
+    run_prediction = st.button("🚀 Generate Live Prediction & Financial Impact Reports", type="primary", use_container_width=True)
+    
+    if run_prediction:
         # Map categorical training strings to numeric representations used in training
         training_map = {'0 Hours': 0, '1-20 Hours': 10, '21-50 Hours': 35, '50+ Hours': 60}
         ai_training_numeric = training_map[ai_training]
         
-        # Prepare input dict
+        # Prepare data dict
         input_data = {
             'Age': age, 'Attrition': attrition, 'BusinessTravel': travel, 'DailyRate': daily_rate,
             'Department': department, 'DistanceFromHome': distance, 'Education': education,
@@ -113,57 +134,61 @@ with col2:
             'AI_Adoption_Sentiment': ai_sentiment
         }
         
-        # Robust Alignment: Create full dummy structure matching the model's exact signature
+        # Robust Alignment: Create dummy matrix matching model sign columns
         input_df = pd.DataFrame([input_data])
-        
-        # Build completely structured empty array based on model signature columns
         encoded_template = pd.DataFrame(0, index=[0], columns=model_columns)
         
-        # Map specific values manually into the template columns
         for col in model_columns:
             if col in input_df.columns:
                 encoded_template[col] = input_df[col].values[0]
             else:
-                # Handle categorical text alignment for one-hot encoding columns
                 for cat_feat in ['Department', 'JobRole', 'MaritalStatus', 'Gender', 'OverTime', 'Uses_AI_Tools', 'AI_Adoption_Sentiment', 'Attrition', 'BusinessTravel']:
                     if col.startswith(cat_feat + "_"):
                         val = str(input_data[cat_feat])
                         if col == f"{cat_feat}_{val}":
                             encoded_template[col] = 1
 
-        # Predict using aligned data signature
+        # Predict target class code
         pred_code = model.predict(encoded_template)[0]
         
-        # Map Code back to labels and mid-values for Business Logic calculations
+        # Map labels
         label_map = {0: ("0%", 0), 3: ("1-5%", 3), 8: ("6-10%", 8), 12: ("10%+", 12)}
         gain_label, gain_val = label_map.get(pred_code, ("0%", 0))
         
-        # ----------------------------------------------------
-        # CORE FEATURE ENGINEERING BUSINESS LOGIC (Live Run)
-        # ----------------------------------------------------
-        # Calculate time saved per week (assuming standard 40-hour baseline)
+        # Business Intelligence Formulas (Feature Engineering)
         estimated_time_saved = (gain_val / 100) * 40
-        
-        # Calculate standard hourly cost based on monthly income / 160 hours
         hourly_cost = monthly_income / 160
-        
-        # Calculate overall monetary value of time saved for the organization
         monetary_benefit = estimated_time_saved * hourly_cost
-        
-        # Setting a generic base baseline cost configuration for simulated AI tools
         simulated_ai_cost = 45 
-        
-        # Calculate core ROI percentage metrics
         roi = ((monetary_benefit - simulated_ai_cost) / simulated_ai_cost) * 100
         
-        # Render the calculated output dashboard container blocks
-        st.markdown("<div class='output-box'>", unsafe_allow_html=True)
-        st.metric(label="📊 Predicted Productivity Gain", value=gain_label)
-        st.metric(label="⏱️ Estimated Weekly Time Saved", value=f"{estimated_time_saved:.2f} Hours")
-        st.metric(label="💰 Weekly Monetary Benefit to Company", value=f"${monetary_benefit:.2f}")
+        # Render clean corporate metric layout dashboards
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.subheader("📊 Forecasted Optimization Insights")
         
-        if roi > 0:
-            st.metric(label="📈 Estimated AI ROI", value=f"{roi:.2f}%", delta="Positive Return")
-        else:
-            st.metric(label="📉 Estimated AI ROI", value=f"{roi:.2f}%", delta="Negative/Breakeven", delta_color="inverse")
+        out_col1, out_col2 = st.columns(2)
+        
+        with out_col1:
+            st.markdown("<div class='metric-container'>", unsafe_allow_html=True)
+            st.metric(label="Predicted Productivity Gain", value=gain_label)
+            st.markdown("</div>", unsafe_allow_html=True)
+            
+            st.markdown("<div class='metric-container'>", unsafe_allow_html=True)
+            st.metric(label="Estimated Weekly Time Saved", value=f"{estimated_time_saved:.2f} Hours")
+            st.markdown("</div>", unsafe_allow_html=True)
+            
+        with out_col2:
+            st.markdown("<div class='metric-container'>", unsafe_allow_html=True)
+            st.metric(label="Weekly Monetary Benefit to Organization", value=f"${monetary_benefit:.2f}")
+            st.markdown("</div>", unsafe_allow_html=True)
+            
+            st.markdown("<div class='metric-container'>", unsafe_allow_html=True)
+            if roi > 0:
+                st.metric(label="Estimated AI Strategy ROI", value=f"{roi:.2f}%", delta="Positive Financial Return")
+            else:
+                st.metric(label="Estimated AI Strategy ROI", value=f"{roi:.2f}%", delta="Negative/Breakeven Cost", delta_color="inverse")
+            st.markdown("</div>", unsafe_allow_html=True)
+            
         st.markdown("</div>", unsafe_allow_html=True)
+    else:
+        st.warning("⚠️ Waiting for Input Execution. Please configure Tab 1 and Tab 2, then click the button above.")
